@@ -8,6 +8,7 @@
 </head>
 
 <body>
+	<!--Base Part-->
 
 	<div id="myDIV" class="header">
 		<h3>To Do List:</h3>
@@ -22,7 +23,11 @@
 		<li>Code</li>
 	</ul>
 
+	<div id="logDIV">Log</div>
+
 	<style>
+		/*Style page and Custom Part*/
+
 		/*Font Style*/
 		@font-face{
 			font-family: JLfontS;
@@ -146,9 +151,13 @@
 		.addBtn:hover {
 		  background-color: #bbb;
 		}
+		#logDIV{
+			text-align: center;
+		}
 	</style>
 
 	<script>
+		//JS part interaction
 
 		// 'Close' Button for each list item
 		var myNodelist = document.getElementsByTagName("LI");

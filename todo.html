@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <title>TODO</title>
+  <link href="https://fonts.googleapis.com/css?family=Monoton" rel="stylesheet">
+</head>
+
+<body>
+
+  <h1>TODO List</h1>
+  <div class="adder">
+    <input type="text" id="myInput" class="input" placeholder="Add"/>
+    <span class="add">+</span>
+  </div>
+  <ul>
+    <li class="draggable" draggable="true">Item-1</li>
+    <li class="draggable" draggable="true">Item-2</li>
+    <li class="draggable" draggable="true">Item-3</li>
+    <li class="draggable" draggable="true">Item-4</li>
+    <li class="draggable" draggable="true">Item-5</li>
+  </ul>
+
+</body>
+
+</html>
+
+<script>
+
+var btn = document.querySelector('.add');
+var remove = document.querySelector('.draggable');
+
+function dragStart(e) {
+  this.style.opacity = '0.5';
+  dragSrcEl = this;
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/html', this.innerHTML);
+};
+
+function dragEnter(e) {
+  this.classList.add('over');
+}
+
+function dragLeave(e) {
+  e.stopPropagation();
+  this.classList.remove('over');
+}
+
+function dragOver(e) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  return false;
+}
+
+function dragDrop(e) {
+  if (dragSrcEl != this) {
+    dragSrcEl.innerHTML = this.innerHTML;
+    this.innerHTML = e.dataTransfer.getData('text/html');
+  }
+  return false;
+}
+
+function dragEnd(e) {
+  var listItens = document.querySelectorAll('.draggable');
+  [].forEach.call(listItens, function(item) {
+    item.classList.remove('over');
+  });
+  this.style.opacity = '1';
+}
+
+function addEventsDragAndDrop(el) {
+  el.addEventListener('dragstart', dragStart, false);
+  el.addEventListener('dragenter', dragEnter, false);
+  el.addEventListener('dragover', dragOver, false);
+  el.addEventListener('dragleave', dragLeave, false);
+  el.addEventListener('drop', dragDrop, false);
+  el.addEventListener('dragend', dragEnd, false);
+}
+
+var listItens = document.querySelectorAll('.draggable');
+[].forEach.call(listItens, function(item) {
+  addEventsDragAndDrop(item);
+});
+
+//Add Item to your list on Click
+function addNewItem() {
+  var newItem = document.querySelector('.input').value;
+  if (newItem != '') {
+    document.querySelector('.input').value = '';
+    var li = document.createElement('li');
+    var attr = document.createAttribute('draggable');
+    var ul = document.querySelector('ul');
+    li.className = 'draggable';
+    attr.value = 'true';
+    li.setAttributeNode(attr);
+    li.appendChild(document.createTextNode(newItem));
+    ul.appendChild(li);
+    addEventsDragAndDrop(li);
+
+    var span = document.createElement("SPAN");
+    var txt = document.createTextNode("\u00D7");
+    span.className = "close";
+    span.appendChild(txt);
+    myNodelist[i].appendChild(span);
+
+
+  }
+  else{
+      alert("?!?");
+  }
+}
+
+btn.addEventListener('click', addNewItem);
+
+// 'Close' Button for each list item
+var myNodelist = document.getElementsByTagName("LI");
+var i;
+for (i = 0; i < myNodelist.length; i++) {
+  var span = document.createElement("SPAN");
+  var txt = document.createTextNode("\u00D7");
+  span.className = "close";
+  span.appendChild(txt);
+  myNodelist[i].appendChild(span);
+}
+// Hide on Click 'Close' current list item
+var close = document.getElementsByClassName("close");
+var i;
+for (i = 0; i < close.length; i++) {
+  close[i].onclick = function() {
+    var div = this.parentElement;
+    div.style.display = "none";
+  }
+}
+// Add a "checked" symbol when clicking on a list item
+var list = document.querySelector('ul');
+list.addEventListener('click', function(ev) {
+  if (ev.target.tagName === 'LI') {
+    ev.target.classList.toggle('checked');
+  }
+}, false);
+
+
+</script>
+
+<style>
+
+body {
+  background-color: black;
+  font-family: 'Monoton', cursive;
+  text-align: center;
+}
+
+h1{
+  text-align: center;
+  color: white;
+  font-size: 50px;
+  font-weight: normal;
+}
+
+.adder {
+  position: relative;
+  width: 250px;
+  margin: 0px auto;
+  display: block;
+}
+::-webkit-input-placeholder {
+   color: grey;
+}
+
+.input {
+  outline: none;
+  font-family: 'Monoton', cursive;
+  border: 1px solid white;
+  background-color: black;
+  color: grey;
+  height: 50px;
+  width: 250px;
+  padding-left: 10px;
+  font-weight: 800;
+  font-size: 16px;
+  margin-left: -5px;
+}
+
+span {
+  position: absolute;
+  right: 0;
+  top: 0;
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 1.8;
+  cursor: pointer;
+  transition: all 200ms;
+  color: white;
+  will-change: transform;
+}
+span:hover{
+  transform: rotate(180deg);
+}
+
+ul {
+padding: 0px;
+}
+
+.draggable {
+  will-change: transform;
+  font-family: 'Monoton', cursive;
+  font-weight: 800;
+  height: 50px;
+  list-style-type: none;
+  margin: 10px;
+  background-color: grey;
+  color: white;
+  width: 250px;
+  line-height: 3.2;
+  padding-left: 10px;
+  cursor: move;
+  transition: all 200ms;
+  user-select: none;
+  margin: 10px auto;
+  position: relative;
+  border: 2px solid white;
+  border-radius: 5px;
+}
+.draggable:after {
+  content: '';
+  right: 7px;
+  font-size: 10px;
+  position: absolute;
+  cursor: pointer;
+  line-height: 5;
+  transition: all 200ms;
+  transition-timing-function: cubic-bezier(0.48, 0.72, 0.62, 1.50);
+  transform: translateX(120%);
+  opacity: 0;
+}
+.draggable:hover {
+}
+.draggable:after {
+  opacity: 1;
+  transform: translate(0);
+}    
+.over {
+  transform: scale(1.1, 1.1);
+}
+
+/* Style the close button */
+.close {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  padding: 0px;
+  font-size: 1.2em;
+}
+.close:hover {
+  background-color: #f44336;
+  color: white;
+}
+
+/* When clicked on, add a background color and strike out text */
+ul li.checked {
+  background: lightgrey;
+  color: black;
+  text-decoration: line-through;
+}
+
+/* Add a "checked" mark when clicked on */
+ul li.checked::before {
+  content: '';
+  position: absolute;
+  border-color: black;
+  border-style: solid;
+  border-width: 0 2px 2px 0;
+  top: 10px;
+  left: 16px;
+  transform: rotate(45deg);
+  height: 15px;
+  width: 7px;
+}
+
+</style>
